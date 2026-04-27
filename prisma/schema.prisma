@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+   url = env("DATABASE_URL")
+}
+
+model Country {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String   @unique
+  createdAt DateTime @default(now())
+  states    State[]
+}
+
+model State {
+  id        Int        @id @default(autoincrement())
+  name      String
+  code      String     @unique
+  countryId Int
+  country   Country    @relation(fields: [countryId], references: [id])
+  createdAt DateTime   @default(now())
+  districts District[]
+
+  @@index([countryId])
+  @@index([name])
+}
+
+model District {
+  id           Int           @id @default(autoincrement())
+  name         String
+  code         String        @unique
+  stateId      Int
+  state        State         @relation(fields: [stateId], references: [id])
+  createdAt    DateTime      @default(now())
+  subDistricts SubDistrict[]
+
+  @@index([stateId])
+  @@index([name])
+}
+
+model SubDistrict {
+  id         Int       @id @default(autoincrement())
+  name       String
+  code       String    @unique
+  districtId Int
+  district   District  @relation(fields: [districtId], references: [id])
+  createdAt  DateTime  @default(now())
+  villages   Village[]
+
+  @@index([districtId])
+  @@index([name])
+}
+
+model Village {
+  id            Int         @id @default(autoincrement())
+  name          String
+  code          String      @unique
+  subDistrictId Int
+  subDistrict   SubDistrict @relation(fields: [subDistrictId], references: [id])
+  createdAt     DateTime    @default(now())
+
+  @@index([subDistrictId])
+  @@index([name])
+}
