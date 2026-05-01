@@ -7,7 +7,7 @@ const districtsRouter    = require('./routes/districts')
 const subdistrictsRouter = require('./routes/subdistricts')
 const villagesRouter     = require('./routes/villages')
 const searchRouter       = require('./routes/search')
-const { rateLimit }      = require('./middleware/rateLimit')  // ← added
+const { rateLimit }      = require('./middleware/rateLimit')  
 
 const app  = express()
 const PORT = process.env.PORT || 3000
