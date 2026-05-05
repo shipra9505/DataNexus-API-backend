@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+Dockerfile
+*.log
+.env
+.env.local
+.env.*.local
+dist
+build

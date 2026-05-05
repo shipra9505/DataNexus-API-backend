@@ -20,6 +20,10 @@ router.get('/', async (req, res, next) => {
 
     const where = { subDistrictId: parseInt(subDistrictId) }
 
+    if (req.demoMode) {
+      where.subDistrict = { district: { state: { name: req.demoStateName } } }
+    }
+
     const [villages, total] = await Promise.all([
       prisma.village.findMany({
         where,
@@ -81,6 +85,10 @@ router.get('/:id', async (req, res, next) => {
 
     if (!village) {
       throw new AppError('Village not found', 404)
+    }
+
+    if (req.demoMode && village.subDistrict.district.state.name !== req.demoStateName) {
+      throw new AppError('Demo API key only grants access to Maharashtra villages', 403)
     }
 
     res.json({

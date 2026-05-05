@@ -32,12 +32,22 @@ router.get('/', async (req, res, next) => {
 
     const where = {
       name: { contains: q.trim(), mode: 'insensitive' },
-      ...(districtId && {
-        subDistrict: { districtId: parseInt(districtId) }
-      }),
-      ...(stateId && !districtId && {
-        subDistrict: { district: { stateId: parseInt(stateId) } }
-      })
+    }
+
+    if (districtId) {
+      where.subDistrict = { districtId: parseInt(districtId) }
+    } else if (stateId) {
+      where.subDistrict = { district: { stateId: parseInt(stateId) } }
+    }
+
+    if (req.demoMode) {
+      where.subDistrict = {
+        ...where.subDistrict,
+        district: {
+          ...((where.subDistrict && where.subDistrict.district) || {}),
+          state: { name: req.demoStateName }
+        }
+      }
     }
 
     const villages = await prisma.village.findMany({
@@ -98,7 +108,10 @@ router.get('/autocomplete', async (req, res, next) => {
 
     const villages = await prisma.village.findMany({
       where: {
-        name: { startsWith: q.trim(), mode: 'insensitive' }
+        name: { startsWith: q.trim(), mode: 'insensitive' },
+        ...(req.demoMode && {
+          subDistrict: { district: { state: { name: req.demoStateName } } }
+        })
       },
       take: 10,
       orderBy: { name: 'asc' },
