@@ -2,10 +2,8 @@
   "version": 2,
   "functions": {
     "api/[[...all]].js": {
-      "runtime": "nodejs18.x",
       "memory": 1024,
       "maxDuration": 10
     }
   }
 }
-
