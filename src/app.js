@@ -26,15 +26,26 @@ getRequiredEnv('JWT_SECRET')
 const app = express()
 app.disable('x-powered-by')
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  process.env.FRONTEND_URL,
+  process.env.DEMO_APP_URL,
+  process.env.ADMIN_DASHBOARD_URL
+].filter(Boolean)
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-  ],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'X-API-Key', 'X-2FA-Code', 'Authorization'],
+  allowedHeaders: [
+    'Content-Type',
+    'X-API-Key',
+    'X-2FA-Code',
+    'Authorization'
+  ]
 }))
+
 app.use(express.json())
 app.use(requestLogger)
 

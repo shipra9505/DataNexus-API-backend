@@ -1,1 +1,9 @@
-﻿node_modules\n.env\n.env.local\n.env.*.local\nnpm-debug.log\n.DS_Store\n.vercelignore\n
+﻿node_modules/
+.env
+.env.local
+.env.*.local
+.vercel/
+coverage/
+*.log
+npm-debug.log
+.DS_Store

@@ -13,10 +13,6 @@ const ensureInitialized = async () => {
 }
 
 module.exports = async (req, res) => {
-  if (typeof req.url === 'string' && req.url.startsWith('/api')) {
-    req.url = req.url.replace(/^\/api/, '') || '/'
-  }
-
   try {
     await ensureInitialized()
   } catch (error) {
