@@ -53,14 +53,18 @@ app.get('/', (req, res) => {
   res.json({ success: true, message: 'Bluestock Village API is running!', version: 'v1' })
 })
 
-app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/admin', adminRouter)
-app.use('/api/v1/usage', usageRouter)
-app.use('/api/v1/states', requireApiKey, rateLimit(), statesRouter)
-app.use('/api/v1/districts', requireApiKey, rateLimit(), districtsRouter)
+// Public routes — no API key required
+app.use('/api/v1/auth',   authRouter)
+app.use('/api/v1/admin',  adminRouter)
+app.use('/api/v1/usage',  usageRouter)
+app.use('/api/v1/search', searchRouter) // ← remove requireApiKey for search
+
+// Protected routes — API key required
+app.use('/api/v1/states',       requireApiKey, rateLimit(), statesRouter)
+app.use('/api/v1/districts',    requireApiKey, rateLimit(), districtsRouter)
 app.use('/api/v1/subdistricts', requireApiKey, rateLimit(), subdistrictsRouter)
-app.use('/api/v1/villages', requireApiKey, rateLimit(), villagesRouter)
-app.use('/api/v1/search', requireApiKey, rateLimit(), searchRouter)
+app.use('/api/v1/villages',     requireApiKey, rateLimit(), villagesRouter)
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.get('/openapi.json', (req, res) => res.json(swaggerSpec))
 
