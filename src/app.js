@@ -32,10 +32,13 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
-  'https://data-nexus-demo-app.vercel.app',
+  'https://data-nexus-api-demo-app.vercel.app',
+  'https://data-nexus-api-b2b-portal.vercel.app',
+  'https://data-nexus-api-admin-dashboard.vercel.app',
   process.env.FRONTEND_URL,
   process.env.DEMO_APP_URL,
-  process.env.ADMIN_DASHBOARD_URL
+  process.env.ADMIN_DASHBOARD_URL,
+  process.env.B2B_PORTAL_URL
 ].filter(Boolean)
 
 // CORS Configuration
