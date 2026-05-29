@@ -50,11 +50,11 @@ app.use(cors({
     // Allow requests with no origin (Postman, mobile apps, curl, etc.)
     if (!origin) return callback(null, true)
 
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       return callback(null, true)
     }
 
-    return callback(new Error('CORS not allowed for this origin'))
+    return callback(new Error(`CORS not allowed for this origin: ${origin}`))
   },
 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
