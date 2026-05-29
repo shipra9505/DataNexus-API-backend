@@ -35,6 +35,10 @@ const allowedOrigins = [
   'https://data-nexus-api-demo-app.vercel.app',
   'https://data-nexus-api-b2b-portal.vercel.app',
   'https://data-nexus-api-admin-dashboard.vercel.app',
+  'https://data-nexus-api-demo-c6r9n0g85-shipra9505s-projects.vercel.app',
+  'https://data-nexus-api-admin-dashboard-1tqi8jhqx-shipra9505s-projects.vercel.app',
+  'https://data-nexus-api-b2b-portal-o0p7625wm-shipra9505s-projects.vercel.app'
+
   process.env.FRONTEND_URL,
   process.env.DEMO_APP_URL,
   process.env.ADMIN_DASHBOARD_URL,
