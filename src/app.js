@@ -101,7 +101,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/admin', adminRouter)
 app.use('/api/v1/usage', usageRouter)
-app.use('/api/v1/search', searchRouter)
+app.use('/api/v1/search', requireApiKey, searchRouter)
 
 // Protected routes — API key required
 app.use(

@@ -15,6 +15,7 @@ const isValidInt = (val) => {
 router.get('/', async (req, res, next) => {
   try {
     const { q, stateId, districtId } = req.query
+    console.info('[SEARCH] query=', { q, stateId, districtId, demoMode: req.demoMode })
     const limit = Math.min(parseInt(req.query.limit) || 10, 50)
 
     // ✅ Validation
