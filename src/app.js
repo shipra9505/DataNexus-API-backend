@@ -28,6 +28,8 @@ const app = express()
 
 app.disable('x-powered-by')
 
+const allowPublicSearch = process.env.ALLOW_PUBLIC_SEARCH === 'true'
+
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
@@ -101,7 +103,11 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/admin', adminRouter)
 app.use('/api/v1/usage', usageRouter)
-app.use('/api/v1/search', requireApiKey, searchRouter)
+app.use(
+  '/api/v1/search',
+  ...(allowPublicSearch ? [] : [requireApiKey]),
+  searchRouter
+)
 
 // Protected routes — API key required
 app.use(
