@@ -35,7 +35,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
     return
   }
 
-  return transporter.sendMail(mailOptions)
+  try {
+    return await transporter.sendMail(mailOptions)
+  } catch (error) {
+    console.warn('Email send failed, continuing without blocking request:', error.message)
+    return null
+  }
 }
 
 const sendUsageAlert = async ({ user, current, limit, threshold }) => {
