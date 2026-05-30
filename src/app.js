@@ -1,10 +1,3 @@
-app.get('/test', (req, res) => {
-  res.json({
-    success: true,
-    message: 'TEST ROUTE WORKING'
-  })
-})
-
 require('dotenv').config()
 
 const express = require('express')
