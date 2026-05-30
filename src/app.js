@@ -48,34 +48,49 @@ const allowedOrigins = [
   process.env.B2B_PORTAL_URL
 ].filter(Boolean)
 
-// CORS Configuration — strict allowlist and simple debug logging
+// // CORS Configuration — strict allowlist and simple debug logging
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     // Allow requests with no origin (Postman, mobile apps, curl, server-to-server)
+//     if (!origin) return callback(null, true)
+
+//     const isAllowed = allowedOrigins.includes(origin)
+//     // Basic debug log to help diagnose mismatched origins in production
+//     console.info(`[CORS] incoming origin=${origin} allowed=${isAllowed}`)
+
+//     if (isAllowed) return callback(null, true)
+
+//     return callback(new Error(`CORS not allowed for this origin: ${origin}`))
+//   },
+
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+
+//   allowedHeaders: [
+//     'Content-Type',
+//     'Authorization',
+//     'X-API-Key',
+//     'X-2FA-Code'
+//   ],
+
+//   credentials: true
+// }
+
+// app.use(cors(corsOptions))
+
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (Postman, mobile apps, curl, server-to-server)
-    if (!origin) return callback(null, true)
-
-    const isAllowed = allowedOrigins.includes(origin)
-    // Basic debug log to help diagnose mismatched origins in production
-    console.info(`[CORS] incoming origin=${origin} allowed=${isAllowed}`)
-
-    if (isAllowed) return callback(null, true)
-
-    return callback(new Error(`CORS not allowed for this origin: ${origin}`))
-  },
-
+  origin: true,
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-
   allowedHeaders: [
     'Content-Type',
     'Authorization',
     'X-API-Key',
     'X-2FA-Code'
-  ],
-
-  credentials: true
+  ]
 }
 
 app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 
 // Handle preflight requests using the same options so responses reflect the allowlist
 // Handle preflight requests using the same options so responses reflect the allowlist
