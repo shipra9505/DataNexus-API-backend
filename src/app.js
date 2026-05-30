@@ -32,9 +32,11 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
-  // 'https://data-nexus-api-demo-app.vercel.app',
-  // 'https://data-nexus-api-b2b-portal.vercel.app',
-  // 'https://data-nexus-api-admin-dashboard.vercel.app',
+  'https://data-nexus-api-demo-app.vercel.app',
+  'https://data-nexus-api-b2b-portal.vercel.app',
+  'https://data-nexus-api-admin-dashboard.vercel.app',
+  // Some deployments may use a non-API subdomain (typo/misconfig), allow both when intentional
+  'https://data-nexus-demo-app.vercel.app',
   'https://data-nexus-api-demo-c6r9n0g85-shipra9505s-projects.vercel.app',
   'https://data-nexus-api-admin-dashboard-1tqi8jhqx-shipra9505s-projects.vercel.app',
   'https://data-nexus-api-b2b-portal-o0p7625wm-shipra9505s-projects.vercel.app',
@@ -44,15 +46,17 @@ const allowedOrigins = [
   process.env.B2B_PORTAL_URL
 ].filter(Boolean)
 
-// CORS Configuration
-app.use(cors({
+// CORS Configuration — strict allowlist and simple debug logging
+const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (Postman, mobile apps, curl, etc.)
+    // Allow requests with no origin (Postman, mobile apps, curl, server-to-server)
     if (!origin) return callback(null, true)
 
-    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-      return callback(null, true)
-    }
+    const isAllowed = allowedOrigins.includes(origin)
+    // Basic debug log to help diagnose mismatched origins in production
+    console.info(`[CORS] incoming origin=${origin} allowed=${isAllowed}`)
+
+    if (isAllowed) return callback(null, true)
 
     return callback(new Error(`CORS not allowed for this origin: ${origin}`))
   },
@@ -67,10 +71,18 @@ app.use(cors({
   ],
 
   credentials: true
-}))
+}
 
-// Handle preflight requests
-app.options(/.*/, cors())
+app.use(cors(corsOptions))
+
+// Handle preflight requests using the same options so responses reflect the allowlist
+// Handle preflight requests using the same options so responses reflect the allowlist
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return cors(corsOptions)(req, res, next)
+  }
+  next()
+})
 
 app.use(express.json())
 
